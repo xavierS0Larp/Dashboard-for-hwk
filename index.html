@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriHuaiRat | ระบบทะเบียนเกษตรกร อ.ห้วยราช จ.บุรีรัมย์</title>
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Leaflet CSS for GIS Mapping -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+</head>
+<body>
+
+  <!-- MAIN APP SHELL (Rounded Window Container) -->
+  <div class="app-shell">
+
+    <!-- TOP NAVBAR -->
+    <nav class="top-nav">
+      <a href="#" class="brand-logo">
+        <div class="brand-icon-circle">🌾</div>
+        <span>AgriHuaiRat</span>
+      </a>
+
+      <div class="nav-links">
+        <a class="nav-link active" data-tab="dashboard">Dashboard</a>
+        <a class="nav-link" data-tab="crops">สถิติพืช</a>
+        <a class="nav-link" data-tab="map">แผนที่ GIS</a>
+        <a class="nav-link" data-tab="farmers">รายชื่อเกษตรกร</a>
+        <a class="nav-link" data-tab="reports">รายงาน</a>
+      </div>
+
+      <div class="top-nav-right">
+        <button class="icon-btn-circle" title="ค้นหา">🔍</button>
+        <button class="icon-btn-circle" title="การแจ้งเตือน">🔔</button>
+        <div class="user-avatar-badge" title="เจ้าหน้าที่เกษตร">กษ</div>
+      </div>
+    </nav>
+
+    <!-- WELCOME / HERO ROW -->
+    <section class="welcome-row">
+      <div>
+        <h1 class="welcome-title">Welcome Back, เกษตรอำเภอห้วยราช</h1>
+        <p class="welcome-subtitle">ภาพรวมฐานข้อมูลทะเบียนเกษตรกรและการเพาะปลูก จ.บุรีรัมย์ (2565 – 2567)</p>
+      </div>
+
+      <div class="welcome-actions">
+        <!-- Quick Year Filter Pill -->
+        <select id="quick-year-select" class="dropdown-pill">
+          <option value="ALL">📅 ข้อมูลทุกปี (2565 - 2567)</option>
+          <option value="2567">📅 ปี 2567 (ล่าสุด)</option>
+          <option value="2566">📅 ปี 2566</option>
+          <option value="2565">📅 ปี 2565</option>
+        </select>
+
+        <button id="btn-export-top" class="btn-primary-pill">
+          <span>+ ส่งออกรายงาน (CSV)</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- DASHBOARD BODY WITH SLIM LEFT SIDEBAR -->
+    <div class="dashboard-layout">
+
+      <!-- LEFT SLIM ICON SIDEBAR -->
+      <aside class="left-sidebar">
+        <div class="sidebar-group">
+          <button class="sidebar-icon-btn active" title="Dashboard">⊞</button>
+          <button class="sidebar-icon-btn" id="nav-btn-chart" title="สถิติกราฟ">📊</button>
+          <button class="sidebar-icon-btn" id="nav-btn-map" title="แผนที่ GIS">📍</button>
+          <button class="sidebar-icon-btn" id="nav-btn-table" title="ตารางข้อมูล">📋</button>
+        </div>
+        <div class="sidebar-group">
+          <button class="sidebar-icon-btn" title="การตั้งค่า">⚙</button>
+          <button class="sidebar-icon-btn" title="ออกจากระบบ">↪</button>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT AREA -->
+      <main class="main-content">
+
+        <!-- TOP 3-COLUMNS GRID (Hero Card + Capsule Chart + Trend Spline) -->
+        <div class="top-dashboard-grid">
+
+          <!-- COLUMN 1: HERO CREDIT CARD WIDGET -->
+          <div class="ui-card">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <span class="card-main-title">ภาพรวมการเพาะปลูก</span>
+                <span class="card-sub-title">Total Cultivated Area</span>
+              </div>
+              <button class="card-action-icon" title="ดูรายละเอียด">↗</button>
+            </div>
+
+            <!-- THE VISA-STYLE HERO CARD (Emerald Green) -->
+            <div class="hero-card-visa">
+              <div class="hero-card-top">
+                <div class="hero-card-brand">
+                  <span>AGRI-PASS</span>
+                </div>
+                <div style="font-size: 16px;">📶</div>
+              </div>
+
+              <div>
+                <div class="hero-card-label">เนื้อที่เพาะปลูกรวม (ไร่)</div>
+                <div class="hero-card-value" id="hero-area-val">94,624.1 <span style="font-size: 16px; font-weight: 700;">ไร่</span></div>
+              </div>
+
+              <div class="hero-card-bottom">
+                <span id="hero-farmers-count">•••• 2099 เกษตรกร</span>
+                <span>EXP 2567</span>
+              </div>
+            </div>
+
+            <!-- Subcard: Community Passed Stat -->
+            <div class="stat-subcard">
+              <div>
+                <div style="font-size: 11px; color: var(--c-subtext); font-weight: 700;">ผ่านการประชาคมแล้ว</div>
+                <div style="font-size: 20px; font-weight: 900; color: var(--c-text);" id="sub-passed-count">7,795 แปลง</div>
+              </div>
+              <div class="pill-growth" id="sub-passed-pct">+87.3%</div>
+            </div>
+          </div>
+
+          <!-- COLUMN 2: CENTER CAPSULE BARS CHART (Engagement Rate style) -->
+          <div class="ui-card">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <span class="card-main-title">สัดส่วนพื้นที่เพาะปลูก (Crop Distribution)</span>
+                <span class="card-sub-title">เนื้อที่รายชนิดพืชเศรษฐกิจ (ไร่)</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="toggle-pills-group">
+                  <button class="toggle-pill-btn active" id="btn-toggle-crops">รายพืช</button>
+                  <button class="toggle-pill-btn" id="btn-toggle-tambons">รายตำบล</button>
+                </div>
+                <button class="card-action-icon">↗</button>
+              </div>
+            </div>
+
+            <!-- Dynamic Capsule Pill Bars Container -->
+            <div class="capsule-chart-container" id="capsule-bars-wrapper">
+              <!-- Rendered via JavaScript -->
+            </div>
+          </div>
+
+          <!-- COLUMN 3: RIGHT TREND & QUICK STATS -->
+          <div class="ui-card">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <span class="card-main-title">แนวโน้มการขึ้นทะเบียน</span>
+                <span class="card-sub-title">Yearly Registration Growth</span>
+              </div>
+              <button class="card-action-icon">↗</button>
+            </div>
+
+            <div class="trend-stat-row">
+              <div>
+                <div style="font-size: 11px; color: var(--c-subtext); font-weight: 700;">จำนวนแปลงปีล่าสุด</div>
+                <div class="trend-amount" id="trend-year-count">3,031 แปลง</div>
+              </div>
+              <div class="pill-growth" id="trend-year-growth">+4.7% (2567)</div>
+            </div>
+
+            <!-- Smooth Spline Area Chart (SVG) -->
+            <div style="height: 75px; width: 100%; position: relative;">
+              <svg viewBox="0 0 300 75" preserveAspectRatio="none" style="width: 100%; height: 100%;">
+                <defs>
+                  <linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#0C7C59" stop-opacity="0.25"></stop>
+                    <stop offset="100%" stop-color="#0C7C59" stop-opacity="0.0"></stop>
+                  </linearGradient>
+                </defs>
+                <!-- Area Fill -->
+                <path d="M 0,55 Q 75,65 150,45 T 300,15 L 300,75 L 0,75 Z" fill="url(#trendGrad)"></path>
+                <!-- Smooth Curve Line -->
+                <path d="M 0,55 Q 75,65 150,45 T 300,15" fill="none" stroke="#0C7C59" stroke-width="2.5" stroke-linecap="round"></path>
+              </svg>
+            </div>
+
+            <!-- Action Buttons (Send / Receive style from screenshot) -->
+            <div class="action-buttons-row">
+              <button class="btn-pill-solid" id="btn-filter-tbk">
+                <span>ทบก. 75.2% ↑</span>
+              </button>
+              <button class="btn-pill-outline" id="btn-filter-farmbook">
+                <span>FARMBOOK 24.8% ↓</span>
+              </button>
+            </div>
+
+            <!-- Sub Mini-Card: Land Tenure -->
+            <div class="mini-stat-card">
+              <div>
+                <div style="font-size: 11px; color: var(--c-subtext); font-weight: 700;">การถือครองที่ดินหลัก</div>
+                <div style="font-size: 16px; font-weight: 900; color: var(--c-text);">6,216 แปลง (ครัวเรือน)</div>
+              </div>
+              <div class="pill-growth">+69.6%</div>
+            </div>
+
+            <!-- Sub Mini-Card: Top Tambons Stack -->
+            <div class="mini-stat-card" style="margin-top: 8px;">
+              <div>
+                <div style="font-size: 11px; color: var(--c-subtext); font-weight: 700;">ตำบลพื้นที่หนาแน่น</div>
+                <div style="font-size: 13px; font-weight: 800; color: var(--c-text);">ต.โคกเหล็ก, สามแวง</div>
+              </div>
+              <div class="avatar-stack">
+                <div class="avatar-stack-item">คล</div>
+                <div class="avatar-stack-item">สว</div>
+                <div class="avatar-stack-item">หร</div>
+                <div class="avatar-stack-item" style="background-color: var(--c-primary); color: #FFF;">+4</div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- BOTTOM ROW: INTERACTIVE GIS MAP & RECENT FARMERS TABLE -->
+        <div class="bottom-dashboard-grid">
+
+          <!-- GIS MAP CARD -->
+          <div class="ui-card">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <span class="card-main-title">แผนที่ภูมิสารสนเทศแปลงเกษตรกร (Interactive GIS Map)</span>
+                <span class="card-sub-title">พิกัดจริง อ.ห้วยราช จ.บุรีรัมย์ (8,756 พิกัด WGS84)</span>
+              </div>
+              <button class="card-action-icon" id="btn-reset-map" title="รีเซ็ตมุมมอง">⌖</button>
+            </div>
+
+            <!-- Tambon Filter Chips -->
+            <div class="filter-chips-row" id="tambon-chips-group">
+              <button class="chip-btn active" data-tambon="ALL">ทุกตำบล</button>
+              <button class="chip-btn" data-tambon="โคกเหล็ก">โคกเหล็ก</button>
+              <button class="chip-btn" data-tambon="สามแวง">สามแวง</button>
+              <button class="chip-btn" data-tambon="ห้วยราชา">ห้วยราชา</button>
+              <button class="chip-btn" data-tambon="บ้านตะโก">บ้านตะโก</button>
+              <button class="chip-btn" data-tambon="สนวน">สนวน</button>
+              <button class="chip-btn" data-tambon="ตาเสา">ตาเสา</button>
+              <button class="chip-btn" data-tambon="เมืองโพธิ์">เมืองโพธิ์</button>
+            </div>
+
+            <!-- Leaflet Map Container -->
+            <div class="map-container-fintech" id="map"></div>
+          </div>
+
+          <!-- RECENT FARMERS TABLE (Payment History style) -->
+          <div class="ui-card">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <span class="card-main-title">รายการขึ้นทะเบียนแปลงเกษตรกร (Directory)</span>
+                <span class="card-sub-title">Recent registrations & plot details</span>
+              </div>
+              <input type="text" id="table-search" class="search-input-pill" placeholder="🔍 ค้นหาชื่อ, โฉนด, พืช...">
+            </div>
+
+            <div class="fintech-table-wrapper">
+              <table class="fintech-table">
+                <thead>
+                  <tr>
+                    <th>เกษตรกร</th>
+                    <th>ตำบล</th>
+                    <th>พืช</th>
+                    <th>สถานะ</th>
+                    <th style="text-align: right;">เนื้อที่ (ไร่)</th>
+                  </tr>
+                </thead>
+                <tbody id="table-body">
+                  <!-- Dynamic Rows -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination Row -->
+            <div class="table-pagination-row">
+              <span id="pagination-info">แสดงข้อมูล 1 - 10</span>
+              <div style="display: flex; gap: 6px;">
+                <button id="btn-page-prev" class="page-btn-pill">‹ ก่อนหน้า</button>
+                <span id="page-display" style="padding: 6px 10px; font-weight: 800;">1</span>
+                <button id="btn-page-next" class="page-btn-pill">ถัดไป ›</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </main>
+    </div>
+
+  </div>
+
+  <!-- FARMER PROFILE MODAL -->
+  <div id="farmer-modal" class="modal-backdrop">
+    <div class="modal-content">
+      <button id="modal-close" class="modal-close-btn">✕</button>
+      <div style="margin-bottom: 20px;">
+        <span class="status-dot-pill success" style="margin-bottom: 8px;">ประวัติทะเบียนเกษตรกร</span>
+        <h2 id="modal-farmer-name" style="font-size: 22px; font-weight: 900; color: var(--c-text); margin-top: 4px;">-</h2>
+        <p id="modal-farmer-address" style="font-size: 13px; color: var(--c-subtext); font-weight: 600;">-</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+        <div style="background-color: var(--c-bg); border-radius: 14px; padding: 14px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 700; color: var(--c-subtext);">จำนวนแปลงรวม</div>
+          <div id="modal-total-plots" style="font-size: 22px; font-weight: 900; color: var(--c-primary);">-</div>
+        </div>
+        <div style="background-color: var(--c-bg); border-radius: 14px; padding: 14px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 700; color: var(--c-subtext);">เนื้อที่เพาะปลูกรวม</div>
+          <div id="modal-total-area" style="font-size: 22px; font-weight: 900; color: var(--c-primary);">-</div>
+        </div>
+        <div style="background-color: var(--c-bg); border-radius: 14px; padding: 14px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 700; color: var(--c-subtext);">สถานะล่าสุด</div>
+          <div id="modal-latest-status" style="font-size: 14px; font-weight: 900; margin-top: 4px;">-</div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 14px; font-weight: 800; margin-bottom: 10px; color: var(--c-text);">รายการแปลงย้อนหลัง (2565 - 2567):</h3>
+      <div class="fintech-table-wrapper" style="max-height: 240px; overflow-y: auto;">
+        <table class="fintech-table" style="font-size: 12px;">
+          <thead>
+            <tr>
+              <th>ปี</th>
+              <th>ที่ตั้งแปลง</th>
+              <th>พืช & พันธุ์</th>
+              <th>เอกสารสิทธิ์</th>
+              <th style="text-align: right;">เนื้อที่ (ไร่)</th>
+            </tr>
+          </thead>
+          <tbody id="modal-plots-tbody">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS for GIS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- Embedded Data & Main Application Logic -->
+  <script src="farmers_data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

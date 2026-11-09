@@ -1,0 +1,825 @@
+/* 
+  Modern Fintech / SaaS Style (Inspired by Reference Design)
+  Strictly 5 Colors Palette:
+  1. #0C7C59 (Deep Emerald Green) - Hero Card, Active Pill, Peak Chart Bar, Primary Buttons
+  2. #A7F3D0 (Mint / Soft Sage) - Secondary Bars, Chart Gradient, Accent Badges
+  3. #F3F4F6 (Soft Pale Gray / Canvas) - App Canvas Background & Inset Surfaces
+  4. #FFFFFF (Pure White) - Cards, Main Container, Button Text
+  5. #1E293B (Deep Charcoal Slate) - Typography, Headings, Outline Icons
+*/
+
+:root {
+  --c-primary: #0C7C59;
+  --c-mint: #A7F3D0;
+  --c-bg: #F3F4F6;
+  --c-card: #FFFFFF;
+  --c-text: #1E293B;
+  --c-subtext: rgba(30, 41, 59, 0.65);
+  --radius-pill: 9999px;
+  --radius-card: 20px;
+  --radius-outer: 28px;
+  --shadow-soft: 0 10px 35px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Prompt", "Sarabun", sans-serif;
+}
+
+body {
+  background-color: var(--c-bg);
+  color: var(--c-text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Outer Shell (Window Container like in Dribbble reference) */
+.app-shell {
+  width: 100%;
+  max-width: 1440px;
+  background-color: var(--c-card);
+  border-radius: var(--radius-outer);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.07);
+  padding: 24px 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Top Navbar */
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--c-text);
+  text-decoration: none;
+}
+
+.brand-icon-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: var(--c-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-card);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.nav-links {
+  display: flex;
+  gap: 8px;
+  background-color: var(--c-bg);
+  padding: 4px;
+  border-radius: var(--radius-pill);
+}
+
+.nav-link {
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c-text);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.nav-link.active {
+  background-color: var(--c-card);
+  color: var(--c-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.top-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-btn-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: var(--c-card);
+  border: 1px solid var(--c-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.icon-btn-circle:hover {
+  background-color: var(--c-bg);
+}
+
+.user-avatar-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: var(--c-mint);
+  color: var(--c-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  border: 2px solid var(--c-card);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Welcome Row */
+.welcome-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 4px 0 12px 0;
+}
+
+.welcome-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--c-text);
+}
+
+.welcome-subtitle {
+  font-size: 14px;
+  color: var(--c-subtext);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.welcome-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dropdown-pill {
+  background-color: var(--c-card);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.btn-primary-pill {
+  background-color: var(--c-primary);
+  color: var(--c-card);
+  border: none;
+  padding: 9px 20px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(12, 124, 89, 0.2);
+}
+
+.btn-primary-pill:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+/* Dashboard Body with Slim Left Sidebar */
+.dashboard-layout {
+  display: flex;
+  gap: 20px;
+}
+
+/* Left Slim Icon Sidebar */
+.left-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--c-card);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-pill);
+  padding: 14px 8px;
+  width: 54px;
+  height: 480px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.sidebar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.sidebar-icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-subtext);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 15px;
+}
+
+.sidebar-icon-btn:hover {
+  background-color: var(--c-bg);
+  color: var(--c-text);
+}
+
+.sidebar-icon-btn.active {
+  background-color: var(--c-primary);
+  color: var(--c-card);
+  box-shadow: 0 4px 12px rgba(12, 124, 89, 0.3);
+}
+
+/* Main Grid Area */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* Top 3-Columns Grid */
+.top-dashboard-grid {
+  display: grid;
+  grid-template-columns: 310px 1fr 310px;
+  gap: 20px;
+}
+
+@media (max-width: 1200px) {
+  .top-dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 800px) {
+  .top-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* White Card Base */
+.ui-card {
+  background-color: var(--c-card);
+  border-radius: var(--radius-card);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 22px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.card-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-main-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--c-text);
+}
+
+.card-sub-title {
+  font-size: 12px;
+  color: var(--c-subtext);
+  font-weight: 600;
+}
+
+.card-action-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--c-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-text);
+  font-size: 12px;
+  cursor: pointer;
+  border: none;
+}
+
+/* HERO CREDIT CARD (Emerald Green Card from Reference) */
+.hero-card-visa {
+  background: linear-gradient(135deg, var(--c-primary) 0%, #0C7C59 100%);
+  border-radius: 18px;
+  padding: 22px 20px;
+  color: var(--c-card);
+  box-shadow: 0 10px 25px rgba(12, 124, 89, 0.28);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 160px;
+  margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle Wave Background Watermark */
+.hero-card-visa::after {
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.hero-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-card-brand {
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-card-label {
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 10px;
+}
+
+.hero-card-value {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin-top: 2px;
+}
+
+.hero-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.9;
+  letter-spacing: 0.5px;
+  margin-top: 16px;
+}
+
+/* Stat Subcard below Green Card */
+.stat-subcard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 6px;
+}
+
+.pill-growth {
+  background-color: var(--c-mint);
+  color: var(--c-primary);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+
+/* CENTER CAPSULE BARS CHART (Engagement Rate style) */
+.toggle-pills-group {
+  display: flex;
+  background-color: var(--c-bg);
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  gap: 4px;
+}
+
+.toggle-pill-btn {
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+  border: none;
+  background: transparent;
+  color: var(--c-subtext);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggle-pill-btn.active {
+  background-color: var(--c-primary);
+  color: var(--c-card);
+}
+
+.capsule-chart-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 200px;
+  padding: 30px 10px 10px 10px;
+  position: relative;
+}
+
+.capsule-bar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  position: relative;
+}
+
+.capsule-floating-badge {
+  position: absolute;
+  top: -26px;
+  background-color: var(--c-primary);
+  color: var(--c-card);
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+.capsule-bar {
+  width: 44px;
+  border-radius: var(--radius-pill);
+  transition: height 0.4s ease;
+  cursor: pointer;
+}
+
+/* Solid Deep Emerald for Peak Bar */
+.capsule-bar.peak {
+  background-color: var(--c-primary);
+  box-shadow: 0 6px 16px rgba(12, 124, 89, 0.25);
+}
+
+/* Striped Pattern for Other Bars (as in screenshot) */
+.capsule-bar.pattern {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--c-mint),
+    var(--c-mint) 6px,
+    rgba(167, 243, 208, 0.5) 6px,
+    rgba(167, 243, 208, 0.5) 12px
+  );
+  border: 1.5px solid rgba(12, 124, 89, 0.15);
+}
+
+.capsule-bar-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--c-subtext);
+  text-transform: uppercase;
+}
+
+/* RIGHT TREND CARD (Line / Spline Chart) */
+.trend-stat-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.trend-amount {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--c-text);
+  letter-spacing: -0.5px;
+}
+
+.action-buttons-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.btn-pill-solid {
+  background-color: var(--c-primary);
+  color: var(--c-card);
+  border: none;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-pill-outline {
+  background-color: transparent;
+  color: var(--c-text);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Sub-card below Trend */
+.mini-stat-card {
+  background-color: var(--c-bg);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Avatars Stack */
+.avatar-stack {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-stack-item {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--c-mint);
+  color: var(--c-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 900;
+  border: 2px solid var(--c-card);
+  margin-left: -8px;
+}
+
+.avatar-stack-item:first-child {
+  margin-left: 0;
+}
+
+/* BOTTOM SECTION: GIS MAP & FARMER DIRECTORY TABLE */
+.bottom-dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .bottom-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Leaflet Map Card */
+.map-container-fintech {
+  height: 380px;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  position: relative;
+}
+
+/* Filter Bar in Map/Table */
+.filter-chips-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.chip-btn {
+  background-color: var(--c-bg);
+  border: 1px solid transparent;
+  color: var(--c-text);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chip-btn.active {
+  background-color: var(--c-primary);
+  color: var(--c-card);
+}
+
+/* Clean Fintech Table */
+.fintech-table-wrapper {
+  overflow-x: auto;
+}
+
+.fintech-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.fintech-table th {
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--c-subtext);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--c-bg);
+}
+
+.fintech-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--c-bg);
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+.table-farmer-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-farmer-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--c-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.status-dot-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+
+.status-dot-pill.success {
+  background-color: var(--c-mint);
+  color: var(--c-primary);
+}
+
+.status-dot-pill.pending {
+  background-color: var(--c-bg);
+  color: var(--c-text);
+}
+
+.search-input-pill {
+  background-color: var(--c-bg);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  outline: none;
+  width: 100%;
+  max-width: 240px;
+  color: var(--c-text);
+}
+
+.search-input-pill:focus {
+  border-color: var(--c-primary);
+  background-color: var(--c-card);
+}
+
+/* Pagination Pills */
+.table-pagination-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding-top: 10px;
+  font-size: 12px;
+  color: var(--c-subtext);
+  font-weight: 700;
+}
+
+.page-btn-pill {
+  background-color: var(--c-bg);
+  border: none;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--c-text);
+  cursor: pointer;
+}
+
+.page-btn-pill:hover:not(:disabled) {
+  background-color: var(--c-primary);
+  color: var(--c-card);
+}
+
+.page-btn-pill:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.modal-backdrop.open {
+  display: flex;
+}
+
+.modal-content {
+  background-color: var(--c-card);
+  border-radius: var(--radius-card);
+  width: 100%;
+  max-width: 640px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  padding: 28px;
+  position: relative;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: var(--c-bg);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
